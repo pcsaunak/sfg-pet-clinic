@@ -5,11 +5,13 @@ import guru.springframework.sfgpetclinic.models.Vet;
 import guru.springframework.sfgpetclinic.services.OwnerService;
 import guru.springframework.sfgpetclinic.services.VetService;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.stereotype.Component;
 
+@Component
 public class DataLoader implements CommandLineRunner {
 
     /*
-    * The basic idea is to initate some data when the application loads.
+    * The basic idea is to initiate some data when the application loads.
     *
     * After the spring application boots up, this will execute
     * */
