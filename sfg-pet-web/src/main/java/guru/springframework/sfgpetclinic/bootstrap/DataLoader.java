@@ -4,8 +4,6 @@ import guru.springframework.sfgpetclinic.models.Owner;
 import guru.springframework.sfgpetclinic.models.Vet;
 import guru.springframework.sfgpetclinic.services.OwnerService;
 import guru.springframework.sfgpetclinic.services.VetService;
-import guru.springframework.sfgpetclinic.services.map.OwnerServiceMap;
-import guru.springframework.sfgpetclinic.services.map.VetServiceMap;
 import org.springframework.boot.CommandLineRunner;
 
 public class DataLoader implements CommandLineRunner {
@@ -20,15 +18,13 @@ public class DataLoader implements CommandLineRunner {
     private final VetService vetService;
 
 
-    public DataLoader() {
+    /*No autowired required, Spring will automaitcally configure*/
 
-        /*This is without sprring.
-        * Bootstrap should manage itself
-        * Spring to manage what type of data source to use
-        * */
-        ownerService = new OwnerServiceMap();
-        vetService = new VetServiceMap();
+    public DataLoader(OwnerService ownerService, VetService vetService) {
+        this.ownerService = ownerService;
+        this.vetService = vetService;
     }
+
 
     @Override
     public void run(String... args) throws Exception {
