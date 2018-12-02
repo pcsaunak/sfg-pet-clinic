@@ -1,11 +1,9 @@
 package guru.springframework.sfgpetclinic.bootstrap;
 
-import guru.springframework.sfgpetclinic.models.Owner;
-import guru.springframework.sfgpetclinic.models.Pet;
-import guru.springframework.sfgpetclinic.models.PetType;
-import guru.springframework.sfgpetclinic.models.Vet;
+import guru.springframework.sfgpetclinic.models.*;
 import guru.springframework.sfgpetclinic.services.OwnerService;
 import guru.springframework.sfgpetclinic.services.PetTypeService;
+import guru.springframework.sfgpetclinic.services.SpecialtyService;
 import guru.springframework.sfgpetclinic.services.VetService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
@@ -16,27 +14,37 @@ import java.time.LocalDate;
 public class DataLoader implements CommandLineRunner {
 
     /*
-    * The basic idea is to initiate some data when the application loads.
-    *
-    * After the spring application boots up, this will execute
-    * */
+     * The basic idea is to initiate some data when the application loads.
+     *
+     * After the spring application boots up, this will execute
+     * */
 
     private final OwnerService ownerService;
     private final VetService vetService;
     private final PetTypeService petTypeService;
+    private final SpecialtyService specialtyService;
 
     /*No autowired required, Spring will automaitcally configure*/
 
-    public DataLoader(OwnerService ownerService, VetService vetService, PetTypeService petTypeService) {
+    public DataLoader(OwnerService ownerService, VetService vetService, PetTypeService petTypeService, SpecialtyService specialtyService) {
         this.ownerService = ownerService;
         this.vetService = vetService;
         this.petTypeService = petTypeService;
+        this.specialtyService = specialtyService;
     }
 
 
     @Override
     public void run(String... args) throws Exception {
 
+        int count = petTypeService.findAll().size();
+        if (count == 0) {
+            loadData();
+        }
+
+    }
+
+    private void loadData() {
         PetType dog = new PetType();
         dog.setPetType("Dog");
         PetType saveDogPetType = petTypeService.save(dog);
@@ -83,10 +91,24 @@ public class DataLoader implements CommandLineRunner {
         ownerService.save(owner2);
         System.out.println("Saved Owner 2");
 
+        Speciality radiology = new Speciality();
+        radiology.setDescription("Radiology");
+        Speciality savedRadiology = specialtyService.save(radiology);
+
+        Speciality surgery = new Speciality();
+        surgery.setDescription("Surgery");
+        Speciality savedSurgery = specialtyService.save(surgery);
+
+        Speciality dentistry = new Speciality();
+        dentistry.setDescription("Dentistry");
+        Speciality savedDentistry = specialtyService.save(dentistry);
+
+
         Vet vet1 = new Vet();
 
         vet1.setFirstName("Roman");
         vet1.setLastName("Nermar");
+        vet1.getSpecialities().add(savedRadiology);
 
         vetService.save(vet1);
 
@@ -95,6 +117,7 @@ public class DataLoader implements CommandLineRunner {
         Vet vet2 = new Vet();
         vet2.setFirstName("Suram");
         vet2.setLastName("Zoram");
+        vet2.getSpecialities().add(savedSurgery);
 
         vetService.save(vet2);
 
