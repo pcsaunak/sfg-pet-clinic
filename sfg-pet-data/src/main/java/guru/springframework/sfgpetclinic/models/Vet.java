@@ -12,7 +12,7 @@ public class Vet extends Person{
     //JPA would try to load all the relationship all at once.
     // Default is set to Lazy which will not load properties until it is asked for.
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "vet_specialties", joinColumns = @JoinColumn(name = "vet_id"),
             inverseJoinColumns = @JoinColumn(name = "specialty_id"))
     private Set<Speciality> specialities = new HashSet<>();
